@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class PizzaViewModel: ViewModel() {
+class PizzaViewModel: ViewModel(), PizzaInteractionHandler {
 
     private val _state = MutableStateFlow(PizzaState())
     val state = _state.asStateFlow()
@@ -21,5 +21,25 @@ class PizzaViewModel: ViewModel() {
                 ingredients = DummyDataSource.ingredient
             )
         }
+    }
+
+    override fun onBackButtonClick() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onFavoriteButtonClick() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onPizzaSizeButtonClick(pizzaSize: PizzaSize) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onIngredientButtonClick(ingredient: Ingredient) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onAddToCartButtonClick() {
+        TODO("Not yet implemented")
     }
 }
