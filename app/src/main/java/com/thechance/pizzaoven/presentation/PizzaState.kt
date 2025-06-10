@@ -1,6 +1,7 @@
 package com.thechance.pizzaoven.presentation
 
 import androidx.annotation.DrawableRes
+import com.thechance.pizzaoven.presentation.uiModels.Ingredient
 import com.thechance.pizzaoven.presentation.uiModels.PizzaSize
 
 data class PizzaState(
