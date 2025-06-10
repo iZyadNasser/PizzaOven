@@ -2,7 +2,6 @@ package com.thechance.pizzaoven.presentation
 
 import androidx.lifecycle.ViewModel
 import com.thechance.pizzaoven.DummyDataSource
-import com.thechance.pizzaoven.R
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
