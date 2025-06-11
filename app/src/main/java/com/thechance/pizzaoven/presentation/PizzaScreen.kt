@@ -69,11 +69,11 @@ fun PizzaScreen(
     val pagerState = rememberPagerState { state.pizzaTypes.size }
     val scrollState = rememberScrollState()
 
-    val animatedPizzaSize by animateDpAsState(
+    val animatedPizzaSize by animateFloatAsState(
         targetValue = when (state.pizzaSize) {
-            PizzaSize.SMALL -> 180.dp
-            PizzaSize.MEDIUM -> 190.dp
-            PizzaSize.LARGE -> 200.dp
+            PizzaSize.SMALL -> 0.5f
+            PizzaSize.MEDIUM -> 0.54f
+            PizzaSize.LARGE -> 0.58f
         },
         animationSpec = tween(durationMillis = 300)
     )
@@ -150,20 +150,21 @@ fun PizzaScreen(
             HorizontalPager(
                 state = pagerState,
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
             ) { index ->
                 val imageRes = state.pizzaTypes[index].imageRes
 
                 Box(
                     modifier = Modifier
-                        .width(screenWidth),
+                        .fillMaxWidth(),
                     contentAlignment = Alignment.Center
                 ) {
                     Image(
                         painter = painterResource(id = imageRes),
                         contentDescription = null,
+                        contentScale = ContentScale.FillWidth,
                         modifier = Modifier
-                            .size(animatedPizzaSize)
+                            .fillMaxWidth(animatedPizzaSize)
                     )
 
                     for (ingredient in state.ingredients) {
