@@ -5,9 +5,11 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,6 +18,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -34,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -172,7 +177,8 @@ fun PizzaScreen(
 
         Box(
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(bottom = 40.dp),
             contentAlignment = Alignment.Center
         ) {
             Box(
@@ -258,6 +264,50 @@ fun PizzaScreen(
                         letterSpacing = 0.sp,
                         modifier = Modifier
                             .fillMaxWidth()
+                    )
+                }
+            }
+        }
+
+        Text(
+            text = stringResource(R.string.customize_your_pizza),
+            color = Color.Black.copy(alpha = 0.3f),
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 14.sp,
+            textAlign = TextAlign.Center,
+            letterSpacing = 0.sp,
+            modifier = Modifier
+                .padding(start = 16.dp, bottom = 32.dp)
+        )
+
+        LazyRow(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 64.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            contentPadding = PaddingValues(horizontal = 16.dp)
+        ) {
+            items(state.ingredients) { ingredient ->
+                Box(
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .size(64.dp)
+                        .applyIf(ingredient.isPut) {
+                            Modifier
+                                .background(
+                                    color = Color.Green.copy(alpha = 0.15f)
+                                )
+                        }
+                        .clickable(
+                        ) { interactionHandler.onIngredientButtonClick(ingredient) }
+                        .padding(12.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = ingredient.imagesRes[2]),
+                        contentDescription = null,
+                        contentScale = ContentScale.FillBounds,
+                        modifier = Modifier
                     )
                 }
             }
