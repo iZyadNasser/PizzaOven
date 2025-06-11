@@ -1,10 +1,9 @@
 package com.thechance.pizzaoven.presentation
 
 import androidx.annotation.DrawableRes
-import com.thechance.pizzaoven.R
 
 data class PizzaState(
-    @DrawableRes val pizzaTypeRes: Int = R.drawable.im_bread_1,
+    @DrawableRes val pizzaTypesRes: List<Int> = emptyList(),
     val pizzaSize: PizzaSize = PizzaSize.MEDIUM,
     val ingredients: List<Ingredient> = emptyList(),
     val isFavorite: Boolean = true,

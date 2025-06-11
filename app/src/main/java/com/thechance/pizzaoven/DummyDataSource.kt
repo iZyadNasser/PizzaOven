@@ -85,4 +85,12 @@ object DummyDataSource {
             )
         ),
     )
+
+    val pizzaTypesRes = listOf(
+        R.drawable.im_bread_1,
+        R.drawable.im_bread_2,
+        R.drawable.im_bread_3,
+        R.drawable.im_bread_4,
+        R.drawable.im_bread_5,
+    )
 }

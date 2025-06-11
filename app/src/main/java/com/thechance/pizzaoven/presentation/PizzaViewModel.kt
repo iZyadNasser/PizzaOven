@@ -18,7 +18,8 @@ class PizzaViewModel: ViewModel(), PizzaInteractionHandler {
     private fun loadInitialState() {
         _state.update {
             it.copy(
-                ingredients = DummyDataSource.ingredient
+                ingredients = DummyDataSource.ingredient,
+                pizzaTypesRes = DummyDataSource.pizzaTypesRes
             )
         }
     }
@@ -32,7 +33,11 @@ class PizzaViewModel: ViewModel(), PizzaInteractionHandler {
     }
 
     override fun onPizzaSizeButtonClick(pizzaSize: PizzaSize) {
-        TODO("Not yet implemented")
+        _state.update {
+            it.copy(
+                pizzaSize = pizzaSize
+            )
+        }
     }
 
     override fun onIngredientButtonClick(ingredient: Ingredient) {
