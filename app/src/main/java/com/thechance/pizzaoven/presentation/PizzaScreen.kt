@@ -3,6 +3,7 @@ package com.thechance.pizzaoven.presentation
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -30,6 +32,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
@@ -40,6 +43,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.thechance.pizzaoven.R
+import com.thechance.pizzaoven.presentation.components.applyIf
+import com.thechance.pizzaoven.presentation.components.dropShadow
 
 @Composable
 fun PizzaScreen(
@@ -58,6 +63,15 @@ fun PizzaScreen(
             PizzaSize.LARGE -> 200.dp
         },
         animationSpec = tween(durationMillis = 300)
+    )
+
+    val animatedPizzaSizeButton by animateDpAsState(
+        targetValue = when (state.pizzaSize) {
+            PizzaSize.SMALL -> (-72).dp
+            PizzaSize.MEDIUM -> 0.dp
+            PizzaSize.LARGE -> 72.dp
+        },
+        animationSpec = tween(durationMillis = 150)
     )
 
     Column(
@@ -156,69 +170,96 @@ fun PizzaScreen(
                 )
         )
 
-        Row(
+        Box(
             modifier = Modifier
-                .fillMaxSize(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
+                .fillMaxWidth(),
+            contentAlignment = Alignment.Center
         ) {
             Box(
                 modifier = Modifier
+                    .offset(x = animatedPizzaSizeButton)
+                    .dropShadow(
+                        shape = CircleShape,
+                        color = Color.Black.copy(0.25f),
+                        blur = 15.dp,
+                        offsetY = 6.dp,
+                        offsetX = 2.dp,
+                        spread = (-20).dp,
+                    )
+                    .padding(end = 12.dp)
                     .clip(CircleShape)
                     .size(60.dp)
-                    .clickable { interactionHandler.onPizzaSizeButtonClick(PizzaSize.SMALL) },
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "S",
-                    color = Color.Black,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 28.sp,
-                    textAlign = TextAlign.Center,
-                    letterSpacing = 0.sp,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                )
-
-
-            }
-
-            Box(
+                    .background(
+                        color = Color.White
+                    )
+            )
+            Row(
                 modifier = Modifier
-                    .clip(CircleShape)
-                    .size(60.dp)
-                    .clickable { interactionHandler.onPizzaSizeButtonClick(PizzaSize.MEDIUM) },
-                contentAlignment = Alignment.Center
+                    .fillMaxSize(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = "M",
-                    color = Color.Black,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 28.sp,
-                    textAlign = TextAlign.Center,
-                    letterSpacing = 0.sp,
+                Box(
                     modifier = Modifier
-                        .fillMaxWidth()
-                )
-            }
+                        .padding(end = 12.dp)
+                        .clip(CircleShape)
+                        .size(60.dp)
+                        .clickable { interactionHandler.onPizzaSizeButtonClick(PizzaSize.SMALL) },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "S",
+                        color = Color.Black,
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 28.sp,
+                        textAlign = TextAlign.Center,
+                        letterSpacing = 0.sp,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    )
 
-            Box(
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .size(60.dp)
-                    .clickable { interactionHandler.onPizzaSizeButtonClick(PizzaSize.LARGE) },
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "L",
-                    color = Color.Black,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 28.sp,
-                    textAlign = TextAlign.Center,
-                    letterSpacing = 0.sp,
+
+                }
+
+                Box(
                     modifier = Modifier
-                        .fillMaxWidth()
-                )
+                        .padding(end = 12.dp)
+                        .clip(CircleShape)
+                        .size(60.dp)
+                        .clickable { interactionHandler.onPizzaSizeButtonClick(PizzaSize.MEDIUM) },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "M",
+                        color = Color.Black,
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 28.sp,
+                        textAlign = TextAlign.Center,
+                        letterSpacing = 0.sp,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    )
+                }
+
+                Box(
+                    modifier = Modifier
+                        .padding(end = 12.dp)
+                        .clip(CircleShape)
+                        .size(60.dp)
+                        .clickable { interactionHandler.onPizzaSizeButtonClick(PizzaSize.LARGE) },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "L",
+                        color = Color.Black,
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 28.sp,
+                        textAlign = TextAlign.Center,
+                        letterSpacing = 0.sp,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    )
+                }
             }
         }
     }
