@@ -1,11 +1,14 @@
 package com.thechance.pizzaoven.presentation
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,10 +36,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
@@ -50,6 +53,9 @@ import androidx.compose.ui.unit.sp
 import com.thechance.pizzaoven.R
 import com.thechance.pizzaoven.presentation.components.applyIf
 import com.thechance.pizzaoven.presentation.components.dropShadow
+import kotlin.random.Random
+
+const val NUM_OF_INGREDIENT = 3
 
 @Composable
 fun PizzaScreen(
@@ -58,7 +64,7 @@ fun PizzaScreen(
     modifier: Modifier = Modifier
 ) {
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
-    val pagerState = rememberPagerState { state.pizzaTypesRes.size }
+    val pagerState = rememberPagerState { state.pizzaTypes.size }
     val scrollState = rememberScrollState()
 
     val animatedPizzaSize by animateDpAsState(
@@ -76,7 +82,7 @@ fun PizzaScreen(
             PizzaSize.MEDIUM -> 0.dp
             PizzaSize.LARGE -> 72.dp
         },
-        animationSpec = tween(durationMillis = 150)
+        animationSpec = tween(durationMillis = 250)
     )
 
     Column(
@@ -144,7 +150,7 @@ fun PizzaScreen(
                 modifier = Modifier
                     .fillMaxWidth()
             ) { index ->
-                val imageRes = state.pizzaTypesRes[index]
+                val imageRes = state.pizzaTypes[index].imageRes
 
                 Box(
                     modifier = Modifier
@@ -157,6 +163,14 @@ fun PizzaScreen(
                         modifier = Modifier
                             .size(animatedPizzaSize)
                     )
+
+                    for (ingredient in state.ingredients) {
+                        IngredientsBox(
+                            ingredient = ingredient,
+                            typeIndex = index,
+                            state = state,
+                        )
+                    }
                 }
             }
         }
@@ -288,18 +302,25 @@ fun PizzaScreen(
             contentPadding = PaddingValues(horizontal = 16.dp)
         ) {
             items(state.ingredients) { ingredient ->
+                val isPut = state.pizzaTypes[pagerState.currentPage].currentIngredients.find {
+                    it.name == ingredient.name
+                } != null
                 Box(
                     modifier = Modifier
                         .clip(CircleShape)
                         .size(64.dp)
-                        .applyIf(ingredient.isPut) {
+                        .applyIf(isPut) {
                             Modifier
                                 .background(
                                     color = Color.Green.copy(alpha = 0.15f)
                                 )
                         }
-                        .clickable(
-                        ) { interactionHandler.onIngredientButtonClick(ingredient) }
+                        .clickable {
+                            interactionHandler.onIngredientButtonClick(
+                                ingredient,
+                                pagerState.currentPage
+                            )
+                        }
                         .padding(12.dp),
                     contentAlignment = Alignment.Center
                 ) {
@@ -309,6 +330,65 @@ fun PizzaScreen(
                         contentScale = ContentScale.FillBounds,
                         modifier = Modifier
                     )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun IngredientsBox(
+    ingredient: Ingredient,
+    typeIndex: Int,
+    state: PizzaState,
+    modifier: Modifier = Modifier
+) {
+    val size = 0.5f
+
+    AnimatedVisibility(
+        visible = state.pizzaTypes[typeIndex].currentIngredients.find { it.name == ingredient.name } != null,
+        enter = scaleIn(initialScale = 40f, animationSpec = tween(500)),
+        exit = fadeOut(tween(200)),
+    ) {
+        Box(
+            modifier = modifier
+                .padding(
+                    start = 24.dp,
+                    top = 24.dp
+                )
+                .clip(CircleShape)
+                .size(200.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            repeat(NUM_OF_INGREDIENT) { i ->
+
+                ingredient.imagesRes.forEach { image ->
+                    val x =
+                        remember { (Random.nextFloat() - 0.6f) * 300 }
+                    val y =
+                        remember { (Random.nextFloat() - 0.6f) * 300 }
+                    val animatedX by
+                        animateFloatAsState(
+                            x * size * 0.9f,
+                            tween(100)
+                        )
+                    val animatedY by
+                        animateFloatAsState(
+                            y * size * 0.9f,
+                            tween(100)
+                        )
+                    Image(
+                        painter = painterResource(id = image),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size((44 * size).dp)
+                            .offset(
+                                x = animatedX.dp,
+                                y = animatedY.dp,
+                            ),
+                        contentScale = ContentScale.Fit,
+                    )
+
                 }
             }
         }
@@ -337,7 +417,7 @@ object DummyInteractionHandler : PizzaInteractionHandler {
         TODO("Not yet implemented")
     }
 
-    override fun onIngredientButtonClick(ingredient: Ingredient) {
+    override fun onIngredientButtonClick(ingredient: Ingredient, typeIndex: Int) {
         TODO("Not yet implemented")
     }
 

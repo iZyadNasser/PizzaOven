@@ -6,7 +6,6 @@ object DummyDataSource {
     val ingredient = listOf(
         Ingredient(
             name = "basil",
-            isPut = false,
             imagesRes = listOf(
                 R.drawable.im_basil_1,
                 R.drawable.im_basil_2,
@@ -22,7 +21,6 @@ object DummyDataSource {
         ),
         Ingredient(
             name = "onion",
-            isPut = false,
             imagesRes = listOf(
                 R.drawable.im_onion_1,
                 R.drawable.im_onion_2,
@@ -38,7 +36,6 @@ object DummyDataSource {
         ),
         Ingredient(
             name = "broccoli",
-            isPut = false,
             imagesRes = listOf(
                 R.drawable.im_broccoli_1,
                 R.drawable.im_broccoli_2,
@@ -54,7 +51,6 @@ object DummyDataSource {
         ),
         Ingredient(
             name = "mushroom",
-            isPut = false,
             imagesRes = listOf(
                 R.drawable.im_mushroom_1,
                 R.drawable.im_mushroom_2,
@@ -70,7 +66,6 @@ object DummyDataSource {
         ),
         Ingredient(
             name = "sausage",
-            isPut = false,
             imagesRes = listOf(
                 R.drawable.im_sausage_1,
                 R.drawable.im_sausage_2,

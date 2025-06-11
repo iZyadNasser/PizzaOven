@@ -19,17 +19,26 @@ class PizzaViewModel : ViewModel(), PizzaInteractionHandler {
         _state.update {
             it.copy(
                 ingredients = DummyDataSource.ingredient,
-                pizzaTypesRes = DummyDataSource.pizzaTypesRes
+                pizzaTypes = DummyDataSource.pizzaTypesRes.map {
+                    PizzaType(
+                        imageRes = it,
+                        currentIngredients = emptyList()
+                    )
+                }
             )
         }
     }
 
     override fun onBackButtonClick() {
-        TODO("Not yet implemented")
+        /*TODO: Not required in task */
     }
 
     override fun onFavoriteButtonClick() {
-        TODO("Not yet implemented")
+        _state.update {
+            it.copy(
+                isFavorite = !it.isFavorite
+            )
+        }
     }
 
     override fun onPizzaSizeButtonClick(pizzaSize: PizzaSize) {
@@ -40,21 +49,40 @@ class PizzaViewModel : ViewModel(), PizzaInteractionHandler {
         }
     }
 
-    override fun onIngredientButtonClick(chosenIngredient: Ingredient) {
-        _state.update {
-            it.copy(
-                ingredients = it.ingredients.map { ingredient ->
-                    if (ingredient.name == chosenIngredient.name) {
-                        ingredient.copy(isPut = !ingredient.isPut)
-                    } else {
-                        ingredient
+    override fun onIngredientButtonClick(chosenIngredient: Ingredient, typeIndex: Int) {
+        _state.update { st ->
+            if (st.pizzaTypes[typeIndex].currentIngredients.find { it.name == chosenIngredient.name } != null) {
+                // Exist
+                st.copy(
+                    pizzaTypes = st.pizzaTypes.mapIndexed { index, pizzaType ->
+                        if (index == typeIndex) {
+                            pizzaType.copy(
+                                currentIngredients = pizzaType.currentIngredients.filter { it.name != chosenIngredient.name }
+                            )
+                        } else {
+                            pizzaType
+                        }
                     }
-                }
-            )
+                )
+            } else {
+                // Not exist
+                st.copy(
+                    pizzaTypes = st.pizzaTypes.mapIndexed { index, pizzaType ->
+                        if (index == typeIndex) {
+                            pizzaType.copy(
+                                currentIngredients = pizzaType.currentIngredients + chosenIngredient
+                            )
+                        } else {
+                            pizzaType
+                        }
+                    }
+                )
+            }
         }
     }
 
+
     override fun onAddToCartButtonClick() {
-        TODO("Not yet implemented")
+        /*TODO: Not required in task */
     }
 }

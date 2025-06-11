@@ -8,7 +8,7 @@ interface PizzaInteractionHandler {
 
     fun onPizzaSizeButtonClick(pizzaSize: PizzaSize)
 
-    fun onIngredientButtonClick(ingredient: Ingredient)
+    fun onIngredientButtonClick(ingredient: Ingredient, typeIndex: Int)
 
     fun onAddToCartButtonClick()
 }
